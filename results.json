@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "dataset_size": 100000,
+    "timestamp": "2026-09-10 15:25:35",
+    "python_version": "3.14.7",
+    "platform": "win32",
+    "scope_note": "Evaluated strictly across English, Telugu, Tamil, and Hindi. Memory includes Python object overhead."
+  },
+  "memory_and_nodes": {
+    "radix_tree": {
+      "total_nodes": 117034,
+      "total_words": 100000,
+      "peak_memory_bytes": 22327760,
+      "bytes_per_word": 223.28,
+      "build_time_seconds": 4.4094
+    },
+    "standard_trie": {
+      "total_nodes": 207427,
+      "total_words": 100000,
+      "peak_memory_bytes": 45179244,
+      "bytes_per_word": 451.79,
+      "build_time_seconds": 3.3987
+    },
+    "hash_baseline": {
+      "total_nodes": 100000,
+      "total_words": 100000,
+      "peak_memory_bytes": 6479808,
+      "bytes_per_word": 64.8,
+      "build_time_seconds": 0.0559
+    },
+    "comparison": {
+      "node_reduction_pct_vs_std_trie": 43.58,
+      "memory_reduction_pct_vs_std_trie": 50.58
+    }
+  },
+  "dynamic_throughput": {
+    "insert_operations": 500,
+    "insert_elapsed_seconds": 0.00379,
+    "insert_ops_per_sec": 131853.06,
+    "increment_elapsed_seconds": 0.00284,
+    "increment_ops_per_sec": 176211.45
+  },
+  "cold_start": {
+    "tested_entries": 5000,
+    "json_save_seconds": 0.1387,
+    "json_load_seconds": 0.0435,
+    "binary_save_seconds": 0.0243,
+    "binary_load_seconds": 0.0285
+  },
+  "query_latency_in_process": {
+    "query_count": 50,
+    "radix_tree": {
+      "mean_us": 52.33,
+      "p50_us": 49.35,
+      "p90_us": 71.93,
+      "p95_us": 79.32,
+      "p99_us": 119.85
+    },
+    "standard_trie": {
+      "mean_us": 57.86,
+      "p50_us": 58.8,
+      "p90_us": 68.41,
+      "p95_us": 72.69,
+      "p99_us": 132.92
+    },
+    "hash_baseline": {
+      "mean_us": 1597.21,
+      "p50_us": 257.05,
+      "p90_us": 485.14,
+      "p95_us": 622.58,
+      "p99_us": 33489.72
+    }
+  },
+  "http_roundtrip_latency": null,
+  "accuracy": {
+    "exact_prefix": {
+      "test_cases": 50,
+      "mrr": 0.1297,
+      "precision_at_5": 0.32,
+      "hits_at_5": 16
+    },
+    "1_edit": {
+      "test_cases": 50,
+      "mrr": 0.129,
+      "precision_at_5": 0.34,
+      "hits_at_5": 17
+    },
+    "2_edit": {
+      "test_cases": 50,
+      "mrr": 0.242,
+      "precision_at_5": 0.38,
+      "hits_at_5": 19
+    },
+    "transposition": {
+      "test_cases": 50,
+      "mrr": 0.1387,
+      "precision_at_5": 0.28,
+      "hits_at_5": 14
+    }
+  }
+}
