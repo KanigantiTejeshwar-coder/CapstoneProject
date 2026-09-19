@@ -8,6 +8,8 @@ A high-performance query suggestion and autocomplete engine utilizing an **Edge-
 
 1. **Edge-Compressed Radix Tree**:
    - Collapses non-branching character sequences into single nodes, drastically reducing node count and memory footprint compared to a standard trie.
+   <img width="1897" height="980" alt="image" src="https://github.com/user-attachments/assets/86082cf1-3714-4900-acc0-e381b708c7be" />
+
    - Dynamic $O(|w|)$ in-place edge splitting and frequency updates without index rebuilds.
 2. **Subtree Max-Weight Top-K Search**:
    - Maintains cached `max_subtree_weight` on nodes.
