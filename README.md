@@ -13,7 +13,7 @@ A high-performance query suggestion and autocomplete engine utilizing an **Edge-
    - Maintains cached `max_subtree_weight` on nodes.
    - Best-first branch-and-bound search terminates early once the remaining subtrees cannot beat the current $k$-th candidate score ($O(|prefix| + K \log K)$).
 3. **Multilingual Support & Script Routing**:
-   - Dedicated Radix Tree instances for **English (Latin)**, **Telugu (తెలుగు)**, **Tamil (தமிழ்)**, and **Hindi (हिन्दी / Devanagari)**.
+   - Dedicated Radix Tree instances for **English**, **Telugu)**, **Tamil**, and **Hindi**.
    - Unicode NFKC normalization, casing, and accent-stripping routines that safely protect Indic vowel signs, viramas, and pulli marks.
    - Script-isolated routing prevents cross-script prefix pollution.
 4. **Typo Correction (Edge-Batched Levenshtein DP)**:
