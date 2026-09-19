@@ -1,8 +1,3 @@
-"""Edge-batched Levenshtein and Damerau-Levenshtein dynamic programming matcher for Radix Trees.
-
-Performs fuzzy prefix search and typo correction directly over compressed edges,
-pruning subtrees when the minimum edit distance in the DP row exceeds max_edits.
-"""
 
 from typing import List, Tuple, Optional, Dict, Any
 from autocomplete_engine.core.radix_tree import RadixTree
@@ -10,11 +5,6 @@ from autocomplete_engine.core.node import RadixNode
 
 
 class LevenshteinRadixMatcher:
-    """Performs typo correction and fuzzy prefix completion over Radix Trees.
-
-    Uses edge-batched incremental Levenshtein/Damerau-Levenshtein DP.
-    """
-
     def __init__(
         self,
         max_edits: int = 2,
@@ -31,21 +21,6 @@ class LevenshteinRadixMatcher:
         k: int = 5,
         prefix_mode: bool = True
     ) -> List[Tuple[str, float, int, Optional[Dict[str, Any]]]]:
-        """Searches for fuzzy matches and completions in the RadixTree.
-
-        Args:
-            tree: The RadixTree to search.
-            query: The search query string (potentially containing typos).
-            k: Maximum number of suggestions to return.
-            prefix_mode: If True, allows fuzzy prefix matches (user typed prefix with typos,
-                         suggestions complete the rest of the word). If False, requires
-                         full-word fuzzy match.
-
-        Returns:
-            List of (suggested_word, score, edit_distance, data) tuples sorted by:
-            1. edit_distance (ascending, closest match first)
-            2. score (descending, highest frequency first)
-        """
         self.nodes_visited = 0
 
         if not query:
@@ -55,16 +30,10 @@ class LevenshteinRadixMatcher:
                 for w, score, data in tree.top_k("", k=k)
             ]
 
-        # Initial DP row for empty prefix: [0, 1, 2, ..., len(query)]
         initial_row = list(range(len(query) + 1))
         candidates: List[
             Tuple[str, float, int, Optional[Dict[str, Any]]]
         ] = []
-
-        # Recursively search children of root under the RadixTree lock.
-        #
-        # The entire recursive traversal remains inside the same RLock,
-        # protecting direct reads of node.children from concurrent mutations.
         with tree._lock:
             for child in tree.root.children.values():
                 self._search_recursive(
@@ -79,9 +48,6 @@ class LevenshteinRadixMatcher:
                     prefix_mode=prefix_mode,
                     k=k
                 )
-
-        # Sort candidates: primary key = edit distance (asc),
-        # secondary key = frequency (desc)
         candidates.sort(key=lambda item: (item[2], -item[1]))
 
         # Deduplicate words keeping lowest edit distance and highest score
@@ -115,7 +81,6 @@ class LevenshteinRadixMatcher:
         prefix_mode: bool,
         k: int
     ) -> None:
-        """Processes an edge character by character using incremental Levenshtein DP."""
         self.nodes_visited += 1
 
         current_row = prev_row
@@ -201,9 +166,7 @@ class LevenshteinRadixMatcher:
 
             return
 
-        # Early termination / branch pruning:
-        # If the minimum value in the final DP row exceeds max_edits,
-        # no completion down this subtree can ever match within max_edits.
+       
         if min(current_row) > self.max_edits:
             return
 
@@ -220,10 +183,6 @@ class LevenshteinRadixMatcher:
                 )
             )
 
-        # Recurse down child edges.
-        #
-        # This method is called while search() holds tree._lock,
-        # so direct traversal of node.children remains protected.
         for child in node.children.values():
             self._search_recursive(
                 node=child,
